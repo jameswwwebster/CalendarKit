@@ -78,8 +78,7 @@ public class TimelinePagerView: UIView {
       timeline.frame.size.height = timeline.fullHeight
       timeline.date = Date().add(TimeChunk.dateComponents(days: i))
 
-      let verticalScrollView = TimelineContainer()
-      verticalScrollView.timeline = timeline
+      let verticalScrollView = TimelineContainer(timeline)
       verticalScrollView.addSubview(timeline)
       verticalScrollView.contentSize = timeline.frame.size
 
@@ -114,15 +113,16 @@ public class TimelinePagerView: UIView {
     let day = TimePeriod(beginning: date,
                          chunk: TimeChunk.dateComponents(days: 1))
     let validEvents = events.filter{$0.datePeriod.overlaps(with: day)}
-    timeline.eventDescriptors = validEvents
+    timeline.layoutAttributes = validEvents.map(EventLayoutAttributes.init)
   }
 }
 
 extension TimelinePagerView: DayViewStateUpdating {
   public func move(from oldDate: Date, to newDate: Date) {
+    let oldDate = oldDate.dateOnly()
     let newDate = newDate.dateOnly()
     if newDate.isEarlier(than: oldDate) {
-      var timelineDate = newDate
+      var timelineDate = newDate.subtract(TimeChunk.dateComponents(days: 0))
       for timelineContainer in timelinePager.reusableViews {
         timelineContainer.timeline.date = timelineDate
         timelineDate = timelineDate.add(TimeChunk.dateComponents(days: 1))
@@ -130,7 +130,7 @@ extension TimelinePagerView: DayViewStateUpdating {
       }
       timelinePager.scrollBackward()
     } else if newDate.isLater(than: oldDate) {
-      var timelineDate = newDate
+      var timelineDate = newDate.add(TimeChunk.dateComponents(days: 0))
       for timelineContainer in timelinePager.reusableViews.reversed() {
         timelineContainer.timeline.date = timelineDate
         timelineDate = timelineDate.subtract(TimeChunk.dateComponents(days: 1))
@@ -140,6 +140,7 @@ extension TimelinePagerView: DayViewStateUpdating {
     }
   }
 }
+
 
 extension TimelinePagerView: PagingScrollViewDelegate {
   func scrollviewDidScrollToViewAtIndex(_ index: Int) {
@@ -151,8 +152,8 @@ extension TimelinePagerView: PagingScrollViewDelegate {
 
     // Update left & right views
 
-    let leftView = timelinePager.reusableViews[0].timeline!
-    let rightView = timelinePager.reusableViews[2].timeline!
+    let leftView = timelinePager.reusableViews[0].timeline
+    let rightView = timelinePager.reusableViews[2].timeline
 
     guard let state = state
       else{ return }
@@ -172,16 +173,16 @@ extension TimelinePagerView: PagingScrollViewDelegate {
 }
 
 extension TimelinePagerView: TimelineViewDelegate {
-  func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
+  public func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
     delegate?.timelinePagerDidLongPressTimelineAtHour(hour)
   }
 }
 
 extension TimelinePagerView: EventViewDelegate {
-  func eventViewDidTap(_ eventView: EventView) {
+  public func eventViewDidTap(_ eventView: EventView) {
     delegate?.timelinePagerDidSelectEventView(eventView)
   }
-  func eventViewDidLongPress(_ eventview: EventView) {
+  public func eventViewDidLongPress(_ eventview: EventView) {
     delegate?.timelinePagerDidLongPressEventView(eventview)
   }
 }

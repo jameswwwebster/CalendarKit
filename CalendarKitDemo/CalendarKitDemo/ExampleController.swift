@@ -113,9 +113,11 @@ class ExampleController: DayViewController, DatePickerControllerDelegate {
       let datePeriod = TimePeriod(beginning: date,
                                   chunk: TimeChunk.dateComponents(minutes: duration))
 
-      event.datePeriod = datePeriod
+      event.startDate = datePeriod.beginning!
+      event.endDate = datePeriod.end!
+
       var info = data[Int(arc4random_uniform(UInt32(data.count)))]
-      info.append("\(datePeriod.beginning!.format(with: "dd.MM"))")
+      info.append("\(datePeriod.beginning!.format(with: "dd.MM.YYYY"))")
       info.append("\(datePeriod.beginning!.format(with: "HH:mm")) - \(datePeriod.end!.format(with: "HH:mm"))")
       event.text = info.reduce("", {$0 + $1 + "\n"})
       event.color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
@@ -160,10 +162,10 @@ class ExampleController: DayViewController, DatePickerControllerDelegate {
   }
 
   override func dayView(dayView: DayView, willMoveTo date: Date) {
-//    print("DayView = \(dayView) will move to: \(date)")
+    print("DayView = \(dayView) will move to: \(date)")
   }
   
   override func dayView(dayView: DayView, didMoveTo date: Date) {
-//    print("DayView = \(dayView) did move to: \(date)")
+    print("DayView = \(dayView) did move to: \(date)")
   }
 }

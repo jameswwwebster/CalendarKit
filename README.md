@@ -3,6 +3,11 @@
 [![Version](https://img.shields.io/cocoapods/v/CalendarKit.svg?style=flat)](http://cocoadocs.org/docsets/CalendarKit)
 [![License](https://img.shields.io/cocoapods/l/CalendarKit.svg?style=flat)](http://cocoadocs.org/docsets/CalendarKit)
 [![Platform](https://img.shields.io/cocoapods/p/CalendarKit.svg?style=flat)](http://cocoadocs.org/docsets/CalendarKit)
+[![Apps Using](https://img.shields.io/cocoapods/at/CalendarKit.svg?label=Apps%20Using%20CalendarKit)](http://cocoapods.org/pods/CalendarKit)
+[![Downloads](https://img.shields.io/cocoapods/dt/CalendarKit.svg?label=Total%20Downloads)](http://cocoapods.org/pods/CalendarKit)
+ <a href="http://starveller.sigsev.io/richardtop/CalendarKit">
+    <img src="http://starveller.sigsev.io/api/repos/richardtop/CalendarKit/badge" alt="stars" />
+  </a>
 
 # CalendarKit
 **CalendarKit** is a fully customizable calendar library written in Swift. It was designed to look similar to iOS Calendar app out-of-the-box, but allow complete customization when needed. To make modifications easy, CalendarKit is composed of multiple small modules. They can be used together, or on their own.
@@ -12,9 +17,9 @@ You can try CalendarKit with CocoaPods. Just enter in Terminal:
 ```ruby
 pod try CalendarKit
 ```
-[Watch demo video](https://www.youtube.com/watch?v=jWM6EfGSCWc)
+[Watch demo video](https://streamable.com/zsnu1)
 
-[Try it live in your browser](https://appetize.io/app/j6pa2hjxhrxzxxv6u3p759kmf8)
+[Try it live in your browser](https://appetize.io/app/15j0k57kfecrawvez76ex2p9j0)
 
 
 
@@ -24,11 +29,6 @@ pod try CalendarKit
 
 ```ruby
 pod 'CalendarKit'
-```
-To install **Swift 3** version, add a version requirement to the Podfile:
-
-```ruby
-pod 'CalendarKit', '0.1.22'
 ```
 
 ## Usage
@@ -45,9 +45,9 @@ override func eventsForDate(_ date: Date) -> [EventDescriptor] {
   for model in models {
       // Create new EventView
       let event = Event()
-      // Specify TimePeriod
-      let datePeriod = TimePeriod(beginning: model.beginning, end: model.start)
-      event.datePeriod = datePeriod
+      // Specify StartDate and EndDate
+      event.startDate = model.startDate
+      event.endDate = model.endDate
       // Add info: event title, subtitle, location to the array of Strings
       var info = [model.title, model.location]
       info.append("\(datePeriod.beginning!.format(with: "HH:mm")) - \(datePeriod.end!.format(with: "HH:mm"))")
@@ -55,7 +55,6 @@ override func eventsForDate(_ date: Date) -> [EventDescriptor] {
       event.text = info.reduce("", {$0 + $1 + "\n"})
       events.append(event)
   }
-
   return events
 }
 ```
@@ -99,7 +98,7 @@ dayView.updateStyle(style)
 ## Requirements
 
 - iOS 9.0+
-- Swift 4.0+
+- Swift 4.1+
 
 ## Dependencies
 - **[Neon](https://github.com/mamaral/Neon)** is used for declarative layout

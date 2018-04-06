@@ -113,13 +113,18 @@ public class DayView: UIView {
     dayHeaderView.anchorAndFillEdge(.top, xPad: 0, yPad: 0, otherSize: headerHeight)
     timelinePagerView.alignAndFill(align: .underCentered, relativeTo: dayHeaderView, padding: 0)
   }
+
+  public func transitionToHorizontalSizeClass(_ sizeClass: UIUserInterfaceSizeClass) {
+    dayHeaderView.transitionToHorizontalSizeClass(sizeClass)
+    updateStyle(style)
+  }
 }
 
 extension DayView: EventViewDelegate {
-  func eventViewDidTap(_ eventView: EventView) {
+  public func eventViewDidTap(_ eventView: EventView) {
     delegate?.dayViewDidSelectEventView(eventView)
   }
-  func eventViewDidLongPress(_ eventview: EventView) {
+  public func eventViewDidLongPress(_ eventview: EventView) {
     delegate?.dayViewDidLongPressEventView(eventview)
   }
 }
@@ -143,7 +148,7 @@ extension DayView: TimelinePagerViewDelegate {
 }
 
 extension DayView: TimelineViewDelegate {
-  func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
+  public func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
     delegate?.dayViewDidLongPressTimelineAtHour(hour)
   }
 }
